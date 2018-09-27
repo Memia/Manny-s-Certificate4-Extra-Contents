@@ -6,19 +6,20 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     public NavMeshAgent agent;
-    private Vector3 targetPos;
-    // Use this for initialization
 
-    // Update is called once per frame
-    void Update()
+    public void SetDestination(Vector3 target)
     {
-        if (targetPos.magnitude >0)
+        //Create a new instance of path to contain new path
+        NavMeshPath path = new NavMeshPath();
+        //Calculate the new path to target
+        if (agent.CalculatePath(target, path))
         {
-            agent.SetDestination(targetPos);
+            //If the path generated is completed (not partial)
+            if (path.status == NavMeshPathStatus.PathComplete)
+            {
+                //Tell the agent to go to target
+                agent.SetDestination(target);
+            }
         }
-    }
-    public void SetTarget(Vector3 target)
-    {
-        targetPos = target;
     }
 }
